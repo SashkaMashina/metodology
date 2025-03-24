@@ -1,4 +1,4 @@
-const readline = require('readline');
+const runGame = require('../index');
 
 const findLCM = (numbers) => {
     var n = numbers.length,
@@ -14,52 +14,20 @@ const findLCM = (numbers) => {
     return a;
 };
 
-const playLCMGame = () => {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
+const generateQuestion = () => {
+    const num1 = Math.floor(Math.random() * 20) + 1;
+    const num2 = Math.floor(Math.random() * 20) + 1;
+    const num3 = Math.floor(Math.random() * 20) + 1;
+    const numbers = [num1, num2, num3];
 
-    console.log('Welcome to the Brain Games!');
-    rl.question('May I have your name? ', (userName) => {
-        console.log(`Hello, ${userName}!`);
-        console.log('Find the smallest common multiple of given numbers.');
-
-        let correctAnswersCount = 0;
-        const rounds = 3;
-
-        const askQuestion = () => {
-            if (correctAnswersCount === rounds) {
-                console.log(`Congratulations, ${userName}!`);
-                rl.close();
-                return;
-            }
-
-            const num1 = Math.floor(Math.random() * 20) + 1;
-            const num2 = Math.floor(Math.random() * 20) + 1;
-            const num3 = Math.floor(Math.random() * 20) + 1;
-            const numbers = [num1, num2, num3];
-
-            const correctAnswer = findLCM(numbers);
-
-            console.log(`Question: ${numbers.join(' ')}`);
-            rl.question('Your answer: ', (userAnswer) => {
-                if (Number(userAnswer) === correctAnswer) {
-                    console.log('Correct!');
-                    correctAnswersCount++;
-                } else {
-                    console.log(`'${userAnswer}' is wrong answer ;(. Correct answer was '${correctAnswer}'.`);
-                    console.log(`Let's try again, ${userName}!`);
-                    rl.close();
-                    return;
-                }
-
-                askQuestion();
-            });
-        };
-
-        askQuestion();
-    });
+    return numbers.join(' ');
 };
 
-playLCMGame();
+const getCorrectAnswer = (question) => {
+    const numbers = question.split(' ').map(Number);
+    return findLCM(numbers);
+};
+
+const gameDescription = 'Find the smallest common multiple of given numbers.';
+
+runGame(gameDescription, generateQuestion, getCorrectAnswer);
